@@ -1,0 +1,114 @@
+---EXP1---
+package com.vivssecure.gmap;
+
+import android.annotation.SuppressLint;
+import android.graphics.Color;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.SeekBar;
+import android.widget.TextView;
+import android.widget.LinearLayout;
+import androidx.appcompat.app.AppCompatActivity;
+
+public class MainActivity extends AppCompatActivity {
+
+    private TextView selectedColorText;
+    private LinearLayout colorDisplayLayout;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        selectedColorText = findViewById(R.id.selectedColorText);
+        colorDisplayLayout = findViewById(R.id.colorDisplayLayout);
+
+        SeekBar redSeekBar = findViewById(R.id.redSeekBar);
+        SeekBar greenSeekBar = findViewById(R.id.greenSeekBar);
+        SeekBar blueSeekBar = findViewById(R.id.blueSeekBar);
+
+        SeekBar.OnSeekBarChangeListener seekBarChangeListener = new SeekBar.OnSeekBarChangeListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                int red = redSeekBar.getProgress();
+                int green = greenSeekBar.getProgress();
+                int blue = blueSeekBar.getProgress();
+
+                // Update the color preview
+                int color = Color.rgb(red, green, blue);
+                colorDisplayLayout.setBackgroundColor(color);
+                selectedColorText.setText("Selected Color: #" + Integer.toHexString(color).toUpperCase());
+            }
+
+            @Override public void onStartTrackingTouch(SeekBar seekBar) {}
+            @Override public void onStopTrackingTouch(SeekBar seekBar) {}
+        };
+
+        redSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        greenSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+        blueSeekBar.setOnSeekBarChangeListener(seekBarChangeListener);
+    }
+}
+---NEXT---
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    android:gravity="center">
+
+    <!-- SeekBars for RGB values -->
+    <TextView
+        android:text="Red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:id="@+id/redSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="255" />
+
+    <TextView
+        android:text="Green"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:id="@+id/greenSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="255" />
+
+    <TextView
+        android:text="Blue"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <SeekBar
+        android:id="@+id/blueSeekBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:max="255" />
+
+    <!-- TextView to display the selected color -->
+    <TextView
+        android:id="@+id/selectedColorText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Selected Color: #000000"
+        android:layout_marginTop="20dp"
+        android:textSize="18sp"/>
+
+    <!-- Layout to show the color preview -->
+    <LinearLayout
+        android:id="@+id/colorDisplayLayout"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginTop="20dp"
+        android:background="#000000"
+        android:orientation="vertical"/>
+</LinearLayout>
+---FINISH---

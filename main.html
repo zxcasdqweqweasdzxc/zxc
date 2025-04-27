@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f0f2f5;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            width: 100%;
+            max-width: 800px;
+        }
+
+        button {
+            padding: 10px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        .message {
+            margin-top: 20px;
+            color: green;
+            font-weight: bold;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="buttons" id="button-container"></div>
+    <div class="message" id="message"></div>
+
+    <script>
+        const experiments = [
+            { name: 'Implicit-Explicit', file: 'exp2.txt' },
+            { name: 'Fragment-DataPass', file: 'exp3.txt' },
+            { name: 'Grid Layout', file: 'exp4.txt' },
+            { name: 'Recycle View', file: 'exp5.txt' },
+            { name: 'WebView', file: 'exp6.txt' },
+            { name: 'Multiple Fragments', file: 'exp7.txt' }, //
+            { name: 'Image Slider', file: 'exp4.txt' },
+            { name: 'Media Player', file: 'exp9.txt' },
+            { name: 'Color-Picker', file: 'exp11.txt' },
+        ];
+
+        const buttonContainer = document.getElementById('button-container');
+        const messageDiv = document.getElementById('message');
+
+        experiments.forEach((exp) => {
+            const button = document.createElement('button');
+            button.innerText = exp.name;
+            button.onclick = () => loadAndCopy(exp.file, exp.name);
+            buttonContainer.appendChild(button);
+        });
+
+        async function loadAndCopy(fileName, displayName) {
+            try {
+                const response = await fetch(fileName);
+                if (!response.ok) throw new Error('File not found');
+                const text = await response.text();
+
+                const parts = text.split(/---(?:EXP\d+|NEXT)---|---FINISH---/).map(part => part.trim()).filter(Boolean);
+
+                for (const code of parts) {
+                    await navigator.clipboard.writeText(code);
+                    await new Promise(resolve => setTimeout(resolve, 500)); // Small delay between copies
+                }
+
+                messageDiv.innerText = `Copied each code block from "${displayName}" separately to clipboard!`;
+                messageDiv.style.color = 'green';
+            } catch (error) {
+                console.error(error);
+                messageDiv.innerText = `Error: Could not load ${fileName}`;
+                messageDiv.style.color = 'red';
+            }
+
+            setTimeout(() => {
+                messageDiv.innerText = '';
+                messageDiv.style.color = 'green';
+            }, 3000);
+        }
+    </script>
+
+</body>
+
+</html>

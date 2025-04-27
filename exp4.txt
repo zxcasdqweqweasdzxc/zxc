@@ -1,0 +1,75 @@
+---EXP4---
+package com.vivssecure.exp4;
+
+import android.os.Bundle;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AbsListView;
+import android.widget.BaseAdapter;
+import android.widget.GridView;
+import android.widget.ImageView;
+
+import androidx.appcompat.app.AppCompatActivity;
+
+public class Trial extends AppCompatActivity {
+
+    int[] images = {R.drawable.ic_launcher_foreground, R.drawable.ic_launcher_foreground};
+    @Override
+    protected void onCreate(Bundle savedInstanceState){
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        GridView gv =  findViewById(R.id.gridView);
+
+        gv.setAdapter(new BaseAdapter() {
+            @Override
+            public int getCount() {
+                return images.length;
+            }
+
+            @Override
+            public Object getItem(int i) {
+                return images[i];
+            }
+
+            @Override
+            public long getItemId(int i) {
+                return i;
+            }
+
+            @Override
+            public View getView(int i, View view, ViewGroup viewGroup) {
+
+                ImageView iv = new ImageView(getApplicationContext());
+                iv.setImageResource(images[i]);
+                iv.setLayoutParams(new AbsListView.LayoutParams(300, 300));
+                return view;
+            }
+        });
+
+    }
+}
+---NEXT---
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+    <GridView
+        android:id="@+id/gridView"
+        android:layout_width="409dp"
+        android:layout_height="729dp"
+        android:numColumns="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.5" />
+</androidx.constraintlayout.widget.ConstraintLayout>
+---FINISH---

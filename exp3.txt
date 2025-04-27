@@ -1,0 +1,97 @@
+---EXP3---
+package com.vivssecure.exp3;
+
+import android.os.Bundle;
+
+import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.fragment.app.FragmentTransaction;
+
+public class MainActivity extends AppCompatActivity {
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        EdgeToEdge.enable(this);
+        setContentView(R.layout.activity_main);
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.container, new FragmentA()).commit();
+    }
+
+
+    public void loadFragmentB(String data){
+
+        FragmentB fragmentB = new FragmentB();
+        Bundle bundle = new Bundle();
+        bundle.putString("text", data);
+        fragmentB.setArguments(bundle);
+
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+        fragmentTransaction.replace(R.id.container, fragmentB);
+        fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
+    }
+}
+---NEXT---
+package com.vivssecure.exp3;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+
+import androidx.fragment.app.Fragment;
+
+public class FragmentA extends Fragment {
+
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState){
+
+        View view = layoutInflater.inflate(R.layout.frag1, container, false);
+
+        EditText data = view.findViewById(R.id.editTextText);
+        Button button =  view.findViewById(R.id.button);
+
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String input = data.getText().toString();
+                ((MainActivity)getActivity()).loadFragmentB(input);
+
+            }
+        });
+
+        return view;
+    }
+}
+---NEXT---
+package com.vivssecure.exp3;
+
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+
+public class FragmentB extends Fragment {
+
+    public View onCreateView(LayoutInflater layoutInflater, ViewGroup container, Bundle savedInstanceState){
+
+        View view = layoutInflater.inflate(R.layout.frag2, container, false);
+
+        TextView data = view.findViewById(R.id.editTextText);
+        String text = getArguments().getString("text");
+        data.setText(text);
+
+        return view;
+    }
+}
+---FINISH---
